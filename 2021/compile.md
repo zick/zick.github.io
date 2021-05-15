@@ -35,9 +35,9 @@
                (ct (compile% (cadr exp)))
                (ce (compile% (caddr exp))))
            (lambda (env)
-             (if (cc env)
-                 (ct env)
-                 (ce env)))))
+             (if (funcall cc env)
+                 (funcall ct env)
+                 (funcall ce env)))))
         ...))
 ```
 
@@ -153,7 +153,7 @@ compiled_t compileEval(uintptr_t obj) {
 * compileEval: `0.93s user 0.02s system 99% cpu 0.953 total`
 
 だいたい1.6倍ほど速くなった。頭を使わず書いたコードでこの結果は素晴らしい。
-もっとも、ごみ集めなど難しい問題を一切考慮していないし、
+もっとも、ごみ集めや末尾再帰などの難しい問題を一切考慮していないし、
 `std::function` のサイズやコピーのコストにも目をつぶっているのだが。
 そういった難しいことを考えるのは面倒なので読者の練習問題とする。
 
