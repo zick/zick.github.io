@@ -69,7 +69,7 @@ Ring Lispはリングバッファ特有の面倒な話があるが、
 こちらがもともとのインタプリタのコード。
 所々変なものがあるが、基本的には上記の `eval%` と同じだ。
 
-```c++
+```cpp
 uintptr_t eval(uintptr_t obj, uintptr_t env) {
  eval:  // eval(obj, env)
   if (isType(obj, Type::kNil) || isType(obj, Type::kErr) ||
@@ -104,7 +104,7 @@ uintptr_t eval(uintptr_t obj, uintptr_t env) {
 そしてこちらが新たに書いたコンパイラのコード。
 所々変なものがあるが、基本的には上記の `compile%` と同じだ。
 
-```c++
+```cpp
 using compiled_t = std::function<uintptr_t(uintptr_t)>;
 compiled_t compileEval(uintptr_t obj) {
   if (isType(obj, Type::kNil) || isType(obj, Type::kErr) ||
