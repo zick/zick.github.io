@@ -55,7 +55,7 @@ varN                            ; => value of expN
 引数を有限にして、代わりに`setq`を入れ子にすれば動く。
 
 ```lisp
-#1=(setq var1 exp1 varN expN extra-var #1#)
+#1=(setq var1 exp1 ... varN expN extra-var #1#)
 ```
 
 `setq`の最後の引数として式全体を入れている。
@@ -70,6 +70,7 @@ varN                            ; => value of expN
        acc (if (= n 0) (return acc) (* n acc))
        n (- n 1)
        _ #1#))
+; => 3628800
 ```
 
 `acc`と`n`に次々値が代入され、最後に`return`で`prog`式から抜ける。
@@ -85,6 +86,7 @@ varN                            ; => value of expN
        acc (if (= n 0) acc (* n acc))
        n (- n 1)
        ret (if (< n 0) acc #1#)))
+; => 3628800
 ```
 
 `#1#`を`if`で囲むことにより、素直なプログラムになった。
@@ -92,7 +94,7 @@ varN                            ; => value of expN
 一般化すると次のようになる。
 
 ```lisp
-#1=(setq var1 exp1 varN expN extra-var (if cond ret #1#))
+#1=(setq var1 exp1 ... varN expN extra-var (if cond ret #1#))
 ```
 
 これで非末尾再帰的なプログラムも書けるのだが、
@@ -115,6 +117,7 @@ varN                            ; => value of expN
              #1#)
        n% (if ret (pop stk) n%)
        ret (if (= n% 0) 1 (* ret n%))))
+; => 3628800
 ```
 
 これはひどい。スタックを自分で管理することで複雑になったのは仕方ないが、
@@ -129,16 +132,16 @@ varN                            ; => value of expN
 
 ```lisp
 (setq
-  var1 exp1
-  ...
-  (if cond
-      (setq
-        varN expN
-        ...
-        (if cond
-            (setq ...)
-            ...))
-      ...))
+ var1 exp1
+ ...
+ varX (if cond
+          (setq
+           varN expN
+           ...
+           varY (if cond
+                    (setq ...)
+                    ...))
+          ...))
 ```
 
 抽象的な例ではわかりにくいと思うので具体例を書く。
@@ -152,6 +155,7 @@ varN                            ; => value of expN
               (setq acc (* n acc)
                     n (- n 1)
                     ret #1#))))
+; => 3628800
 
 ; non tail recursive
 (let ((n 10) ret stk _)
@@ -162,6 +166,7 @@ varN                            ; => value of expN
                     n (- n 1)
                     ret #1#
                     ret (* ret (pop stk))))))
+; => 3628800
 ```
 
 （少なくても私にとて）読み書きしやすいコードになったが、
@@ -181,6 +186,7 @@ varN                            ; => value of expN
                         n #1#
                         m (pop stk)
                         ret #1#)))))
+; => 5
 ```
 
 アッカーマン関数もこの通り、機械的に書けるのだが、
