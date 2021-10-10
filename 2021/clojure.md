@@ -10,12 +10,12 @@ jarファイルをJavaに読み込ませてClojureを起動したような気が
 予想外に面倒だったのでメモを残しておく。
 
 ## 1. 「ご注文はうさぎですか？ BLOOM」を第1羽から再生する
-https://gochiusa.com/bloom/
+[https://gochiusa.com/bloom/](https://gochiusa.com/bloom/)
 
 これをしないとインストールがうまくいかない
 
 ## 2. brewをインストールする
-https://brew.sh/
+[https://brew.sh/](https://brew.sh/)
 
 MacにClojureインストールするにはbrewが必須らしい。
 MacPortsしか使っていない私はまずbrewをインストールすることになった。
@@ -48,7 +48,7 @@ MacのCommandLineToolsが古すぎると怒られたのでアップデート。
 ```
 
 ## 4. Clojureをインストール
-https://clojure.org/guides/getting_started
+[https://clojure.org/guides/getting_started](https://clojure.org/guides/getting_started)
 
 brewコマンド1回で終わり。かんたん。
 
@@ -78,7 +78,7 @@ brewを使って新しいEmacsをインストールした。
 Emacs 27がインストールされた。
 
 ## 6. EmacsからMELPAを使えるようにする
-https://melpa.org/#/getting-started
+[https://melpa.org/#/getting-started](https://melpa.org/#/getting-started)
 
 CIDERをインストールするにはMELPAとやらを使えるようにする必要があるらしい。
 .emacsに以下の設定を書く。
@@ -99,7 +99,7 @@ M-x package-refresh-contents
 ```
 
 ## 7. CIDERをインストール
-https://cider.mx/
+[https://cider.mx/](https://cider.mx/)
 
 Emacsで謎の呪文を実行。
 
