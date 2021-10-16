@@ -101,8 +101,29 @@ ntimes : int -> ('b -> 'a) -> 'a -> 'a
 どこかで単一化をしないといけないような気がするが、
 しばらく考えても分からなかったので諦めた。
 
-このように頭の悪い読者もいるので、
-大事な定義は省略せずに全部書いてもらいたい。
+(2021-10-16 削除)
+
+~~このように頭の悪い読者もいるので、
+大事な定義は省略せずに全部書いてもらいたい。~~
+
+(2021-10-16 追加)
+
+なんと著者の大堀先生直々に答を教えてもらった（
+[tweet1](https://twitter.com/AtsushiOhori/status/1449189916030636032)
+[tweet2](https://twitter.com/AtsushiOhori/status/1449192877645451265)
+[tweet3](https://twitter.com/AtsushiOhori/status/1449196046974742530)）。
+
+```
+W(Γ, fix f x => e) =
+  let (S, t) = W(Γ{x : t1, f : t1 -> t2}, e)  (t1, t2: fresh)
+      S2 = U({t, S(t2)})
+  in (S2 S, S2 S(t1 -> t))
+```
+
+実は `S2 = U({t, S(t2)})` はすでに試していたのだけれど、
+`S2 S(t1 -> t)` とすべきところを `S2 S(t1) -> t` としていたため、
+単一化の結果が部分式に反映されないという、バカバカしいミスをしていた。
+これで無事動いた。
 
 ## ソースコード
 
@@ -290,8 +311,9 @@ ntimes : int -> ('b -> 'a) -> 'a -> 'a
           name (nth x 1) arg (nth x 2) exp (nth x 3)
           fty (list 'fun nt1 nt2)
           [s ety] (w (assoc env arg nt1 name fty) exp)
-          s2 (compose-subst {(second nt2) ety} s)]
-      (list s2 (list 'fun (subst-type s2 nt1) ety)))
+          s2 (unify (list (list ety (subst-type s nt2))))
+          s3 (compose-subst s2 s)]
+      (list s3 (subst-type s3 (list 'fun nt1 ety))))
     ;; (exp exp)
     (= (count x) 2) (let [[s1 t1] (w env (nth x 0))
                           [s2 t2] (w (subst-env s1 env) (nth x 1))
