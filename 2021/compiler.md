@@ -1,6 +1,6 @@
 # 「コンパイラ: 原理と構造」のSECD機械へのコンパイラをClojureで書いた
 
-[前回](/2021/typeinf.md)のあらすじ:
+[前回](/2021/typeinf.html)のあらすじ:
 [コンパイラ: 原理と構造](https://www.amazon.co.jp/gp/product/4320124782/)
 の型推論をClojureで書いた。
 
