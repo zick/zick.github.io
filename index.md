@@ -1,5 +1,7 @@
 # zickのホームページへようこそ
 
+* 2022
+  * 01/26 [Portable PrologをCommon Lispで動かした](/2022/portable.md)
 * 2021
   * 10/17 [「コンパイラ: 原理と構造」のSECD機械へのコンパイラをClojureで書いた](/2021/compiler.md)
   * 10/15 [コンパイラ: 原理と構造」の型推論をClojureで書いた](/2021/typeinf.md)
