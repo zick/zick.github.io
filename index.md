@@ -5,7 +5,7 @@
   * 01/26 [Portable PrologをCommon Lispで動かした](/2022/portable.md)
 * 2021
   * 10/17 [「コンパイラ: 原理と構造」のSECD機械へのコンパイラをClojureで書いた](/2021/compiler.md)
-  * 10/15 [コンパイラ: 原理と構造」の型推論をClojureで書いた](/2021/typeinf.md)
+  * 10/15 [「コンパイラ: 原理と構造」の型推論をClojureで書いた](/2021/typeinf.md)
   * 10/10 [Clojure メモ](/2021/clojure.md)
   * 08/08 [shift/reset プログラミング入門の練習問題をやった](/2021/shift.md)
   * 06/19 [やっぱり式が再帰的なプログラム](/2021/recursion5.md)
