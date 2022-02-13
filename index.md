@@ -1,6 +1,7 @@
 # zickのホームページへようこそ
 
 * 2022
+  * 02/11 [WebAssemblyでgotoをつくる](/2022/wasm_goto.md)
   * 02/11 [WebAssemblyのテキスト表現を書いてみた](/2022/wasm.md)
   * 01/26 [Portable PrologをCommon Lispで動かした](/2022/portable.md)
 * 2021
