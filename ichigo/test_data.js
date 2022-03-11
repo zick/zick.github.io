@@ -1,5 +1,10 @@
-var test_data = [
+var test_data = [];
+test_data.push([
     ["1", "1"],
+    ["#x10", "16"],
+    ["#x1f", "31"],
+    ["0x20", "32"],
+    ["0x2f", "47"],
     ["'a", "A"],
     ["'very-long-name", "VERY-LONG-NAME"],
     ["(car '(a b c))", "A"],
@@ -138,7 +143,8 @@ var test_data = [
     ["(or t)", "*T*"],
     ["(or f)", "NIL"],
     ["(or f f)", "NIL"],
-    ["(or f t f)", "*T*"],
+    ["(csetq ichigo 'matsuri)", "(MATSURI)"],
+    ["(or ichigo t)", "MATSURI"],
     ["(logand)", "-1"],
     ["(logand 3)", "3"],
     ["(logand 3 -1 1)", "1"],
@@ -250,6 +256,14 @@ var test_data = [
     ["(prog () (csetq gomi 'kasu) (return (remob 'kasu)))", "KASU"],
     ["(eq gomi 'kasu)", "NIL"],
     ["(evlis '(t f (+ 1 2)) nil)", "(*T* NIL 3)"],
+    ["(common '(a))", "NIL"],
+    ["(null (get 'a 'common))", "NIL"],
+    ["(uncommon '(a))", "NIL"],
+    ["(get 'a 'common)", "NIL"],
+    ["(special '(a))", "NIL"],
+    ["(null (get 'a 'special))", "NIL"],
+    ["(unspecial '(a))", "NIL"],
+    ["(get 'a 'special)", "NIL"],
 
     // APVALs
     ["blank", " "],
@@ -282,6 +296,10 @@ var test_data = [
     ["(a .)", /R1/],
     ["(a . b c)", /R1/],
     ["ub", /A8/],
+    ["#x", /A8/],
+    ["#xfg", /A8/],
+    ["0x", /A8/],
+    ["0xfh", /A8/],
     ["(cons 1 ub)", /A8/],
     ["(if ub 1 2)", /A8/],
     ["(if t ub 2)", /A8/],
@@ -313,4 +331,317 @@ var test_data = [
     ["(max 1 'a 3)", /I3/],
     ["(conc (list 1) ub (list 3))", /A8/],
     ["(maplist '(1 2 3) '(lambda(x) ub))", /A8/],
-];
+    ["(mapcon '(1 2 3) '(lambda(x) ub))", /A8/],
+]);
+test_data.push([
+    ["(de nilfn () nil)", "NILFN"],
+    ["(nilfn)", "NIL"],
+    ["(compile '(nilfn))", "NIL"],
+    ["(nilfn)", "NIL"],
+
+    ["(de numfn () 42)", "NUMFN"],
+    ["(numfn)", "42"],
+    ["(compile '(numfn))", "NIL"],
+    ["(numfn)", "42"],
+
+    ["(de argfn (x) x)", "ARGFN"],
+    ["(argfn 15)", "15"],
+    ["(compile '(argfn))", "NIL"],
+    ["(argfn 15)", "15"],
+
+    ["(de argfn2 (x y) y)", "ARGFN2"],
+    ["(argfn2 15 16)", "16"],
+    ["(compile '(argfn2))", "NIL"],
+    ["(argfn2 15 16)", "16"],
+
+    ["(de subrfn (x) (1+ x))", "SUBRFN"],
+    ["(subrfn 1)", "2"],
+    ["(compile '(subrfn))", "NIL"],
+    ["(subrfn 1)", "2"],
+
+    ["(de subrfn2 (x y) (cons x (cons y nil)))", "SUBRFN2"],
+    ["(subrfn2 1 2)", "(1 2)"],
+    ["(compile '(subrfn2))", "NIL"],
+    ["(subrfn2 1 2)", "(1 2)"],
+
+    ["(de tasu1 (x) (1+ x))", "TASU1"],
+    ["(de exprfn (x) (tasu1 x))", "EXPRFN"],
+    ["(exprfn 1)", "2"],
+    ["(compile '(exprfn))", "NIL"],
+    ["(exprfn 1)", "2"],
+    ["(compile '(tasu1))", "NIL"],
+    ["(exprfn 1)", "2"],
+    ["(de tasu1 (x) (cons x x))", "TASU1"],
+    ["(exprfn 1)", "(1 . 1)"],
+
+    ["(de produce-a (a) (alistfn))", "PRODUCE-A"],
+    ["(de consume-a () (cons a a))", "CONSUME-A"],
+    ["(de alistfn () (consume-a))", "ALISTFN"],
+    ["(produce-a 15)", "(15 . 15)"],
+    ["(compile '(alistfn))", "NIL"],
+    ["(produce-a 15)", "(15 . 15)"],
+
+    ["(de errorfn () (cons nil (1+ nil)))", "ERRORFN"],
+    ["(errorfn)", /I3/],
+    ["(compile '(errorfn))", "NIL"],
+    ["(errorfn)", /I3/],
+
+    ["(de errorfn2 () (trace (1+ nil)))", "ERRORFN2"],
+    ["(errorfn2)", /I3/],
+    ["(compile '(errorfn2))", "NIL"],
+    ["(errorfn2)", /I3/],
+
+    ["(de errorfn3 () (no-def 1 5))", "ERRORFN3"],
+    ["(errorfn3)", /A2/],
+    ["(compile '(errorfn3))", "NIL"],
+    ["(errorfn3)", /A2/],
+
+    ["(de fsubrfn (x) (+ x (if (zerop x) 256 (* x x))))", "FSUBRFN"],
+    ["(fsubrfn 0)", "256"],
+    ["(fsubrfn 3)", "12"],
+    ["(compile '(fsubrfn))", "NIL"],
+    ["(fsubrfn 0)", "256"],
+    ["(fsubrfn 3)", "12"],
+
+    ["(de iffn (x) (if x 2 3))", "IFFN"],
+    ["(iffn t)", "2"],
+    ["(iffn nil)", "3"],
+    ["(compile '(iffn))", "NIL"],
+    ["(iffn t)", "2"],
+    ["(iffn nil)", "3"],
+
+    ["(de condfn (x) (cond ((null x) 0) (t 1)))", "CONDFN"],
+    ["(condfn nil)", "0"],
+    ["(condfn t)", "1"],
+    ["(compile '(condfn))", "NIL"],
+    ["(condfn nil)", "0"],
+    ["(condfn t)", "1"],
+
+    ["(defun andfn (x y) (and (print x) (print y) 99))", "ANDFN"],
+    ["(andfn 1 2)", "99"],
+    ["(andfn nil 2)", "NIL"],
+    ["(compile '(andfn))", "NIL"],
+    ["(andfn 1 2)", "99"],
+    ["(andfn nil 2)", "NIL"],
+
+    ["(defun quotefn () (cons 'a 'b))", "QUOTEFN"],
+    ["(quotefn)", "(A . B)"],
+    ["(compile '(quotefn))", "NIL"],
+    ["(quotefn)", "(A . B)"],
+
+    ["(defun quotefn2 () (cons 'a '(b c)))", "QUOTEFN2"],
+    ["(quotefn2)", "(A B C)"],
+    ["(compile '(quotefn2))", "NIL"],
+    ["(quotefn2)", "(A B C)"],
+
+    ["(defun logandfn () (logand 0xff 0x7f 0x3f))", "LOGANDFN"],
+    ["(logandfn)", "63"],
+    ["(compile '(logandfn))", "NIL"],
+    ["(logandfn)", "63"],
+
+    ["(defun logorfn () (logor 0xff 0x7f 0x3f))", "LOGORFN"],
+    ["(logorfn)", "255"],
+    ["(compile '(logorfn))", "NIL"],
+    ["(logorfn)", "255"],
+
+    ["(defun logxorfn () (logxor 0xff 0x7f 0x3f))", "LOGXORFN"],
+    ["(logxorfn)", "191"],
+    ["(compile '(logxorfn))", "NIL"],
+    ["(logxorfn)", "191"],
+
+    ["(defun maxfn () (max 7 3 9))", "MAXFN"],
+    ["(maxfn)", "9"],
+    ["(compile '(maxfn))", "NIL"],
+    ["(maxfn)", "9"],
+
+    ["(defun minfn () (min 7 3 9))", "MINFN"],
+    ["(minfn)", "3"],
+    ["(compile '(minfn))", "NIL"],
+    ["(minfn)", "3"],
+
+    ["(defun plusfn () (+ 2 3 4))", "PLUSFN"],
+    ["(plusfn)", "9"],
+    ["(compile '(plusfn))", "NIL"],
+    ["(plusfn)", "9"],
+
+    ["(defun timesfn () (* 2 3 4))", "TIMESFN"],
+    ["(timesfn)", "24"],
+    ["(compile '(timesfn))", "NIL"],
+    ["(timesfn)", "24"],
+
+    ["(defun factfn (n) (cond ((zerop n) 1) (t (* n (factfn (1- n))))))",
+     "FACTFN"],
+    ["(factfn 10)", "3628800"],
+    ["(compile '(factfn))", "NIL"],
+    ["(factfn 10)", "3628800"],
+
+    ["(defun lambdafn () ((lambda(x)(cons x x)) 1))", "LAMBDAFN"],
+    ["(lambdafn)", "(1 . 1)"],
+    ["(compile '(lambdafn))", "NIL"],
+    ["(lambdafn)", "(1 . 1)"],
+
+    ["(defun compfn () ((car '((lambda(x)(cons x x)))) 'a))", "COMPFN"],
+    ["(compfn)", "(A . A)"],
+    ["(compile '(compfn))", "NIL"],
+    ["(compfn)", "(A . A)"],
+
+    ["(defun fargfn (f) (f 99))", "FARGFN"],
+    ["(fargfn '(lambda(x) (1+ x)))", "100"],
+    ["(fargfn '1-)", "98"],
+    ["(compile '(fargfn))", "NIL"],
+    ["(fargfn '(lambda(x) (1+ x)))", "100"],
+    ["(fargfn '1-)", "98"],
+
+    ["(defun listfn () (list 1 (+ 2 3) 4))", "LISTFN"],
+    ["(listfn)", "(1 5 4)"],
+    ["(compile '(listfn))", "NIL"],
+    ["(listfn)", "(1 5 4)"],
+
+    ["(defun lambdacfn (x y) (list ((lambda(x) (list x y)) 99) x y))",
+     "LAMBDACFN"],
+    ["(lambdacfn 1 2)", "((99 2) 1 2)"],
+    ["(compile '(lambdacfn))", "NIL"],
+    ["(lambdacfn 1 2)", "((99 2) 1 2)"],
+
+    ["(defun funcfn (x) (function (lambda (y) (+ x y))))", "FUNCFN"],
+    ["((funcfn 1) 99)", "100"],
+    ["(compile '(funcfn))", "NIL"],
+    ["((funcfn 1) 99)", "100"],
+
+    ["(defun funcfn2 (x y) (maplist y (function " +
+     "(lambda (z) (cons x (car z))))))", "FUNCFN2"],
+    ["(funcfn2 'z '(a b c))", "((Z . A) (Z . B) (Z . C))"],
+    ["(compile '(funcfn2))", "NIL"],
+    ["(funcfn2 'z '(a b c))", "((Z . A) (Z . B) (Z . C))"],
+
+    ["(defun funcfn3 (x) (maplist x 'car))", "FUNCFN3"],
+    ["(funcfn3 '(a b c))", "(A B C)"],
+    ["(compile '(funcfn3))", "NIL"],
+    ["(funcfn3 '(a b c))", "(A B C)"],
+
+    ["(defun labelfn (x) ((label rec (lambda (n) " +
+     "(if (zerop n) 0 (+ n (rec (1- n)))))) x))", "LABELFN"],
+    ["(LABELFN 10)", "55"],
+    ["(compile '(labelfn))", "NIL"],
+    ["(LABELFN 10)", "55"],
+
+    ["(defun orfn (x y) (or (print x) (print y) (print 3)))", "ORFN"],
+    ["(orfn 1 nil)", "1"],
+    ["(orfn nil nil)", "3"],
+    ["(compile '(orfn))", "NIL"],
+    ["(orfn 1 nil)", "1"],
+    ["(orfn nil nil)", "3"],
+
+    ["(defun setqfn (x) (list (setq x (1+ x)) (setq x (1+ x)) x))", "SETQFN"],
+    ["(setqfn 1)", "(2 3 3)"],
+    ["(compile '(setqfn)))", "NIL"],
+    ["(setqfn 1)", "(2 3 3)"],
+
+    ["(defun gen (n) (function (lambda (m) (setq n (+ n m)))))", "GEN"],
+    ["(prog (x) (setq x (gen 100)) (return (list (x 10) (x 90) (x 300))))",
+     "(110 200 500)"],
+    ["(compile '(gen))", "NIL"],
+    ["(prog (x) (setq x (gen 100)) (return (list (x 10) (x 90) (x 300))))",
+     "(110 200 500)"],
+
+    ["(defun hsetqfn (x) (list (function (lambda()x)) (setq x (+ x 1)) x))",
+     "HSETQFN"],
+    ["(cdr (hsetqfn 99))", "(100 100)"],
+    ["(compile '(hsetqfn)))", "NIL"],
+    ["(cdr (hsetqfn 99))", "(100 100)"],
+
+    ["(defun concfn () (conc (list (cons 1 2)) (list 3) (list (list 4 5))))",
+     "CONCFN"],
+    ["(concfn)", "((1 . 2) 3 (4 5))"],
+    ["(compile '(concfn))", "NIL"],
+    ["(concfn)", "((1 . 2) 3 (4 5))"],
+
+    ["(defun selectfn (x) (select x (1 'a) (2 'b) (3 'c) 'd))", "SELECTFN"],
+    ["(selectfn 2)", "B"],
+    ["(selectfn 99)", "D"],
+    ["(compile '(selectfn))", "NIL"],
+    ["(selectfn 2)", "B"],
+    ["(selectfn 99)", "D"],
+
+    ["(defun progfn() (prog () (list 1) (return 2) (list 3)))", "PROGFN"],
+    ["(progfn)", "2"],
+    ["(compile '(progfn))", "NIL"],
+    ["(progfn)", "2"],
+
+    ["(defun returnfn() (prog () (+ 1 2 (return 3))))", "RETURNFN"],
+    ["(returnfn)", "3"],
+    ["(compile '(returnfn))", "NIL"],
+    ["(returnfn)", "3"],
+
+    ["(defun gofn() (prog () (go l3) l1 (return 1) l2 (return 2) l3 (go l1)))",
+     "GOFN"],
+    ["(gofn)", "1"],
+    ["(compile '(gofn))", "NIL"],
+    ["(gofn)", "1"],
+
+    ["(defun loopfn (n) (prog (i acc) (setq i 1) (setq acc 0) " +
+     "l1 (if (> i n) (return acc)) " +
+     "(setq acc (+ acc i)) (setq i (+ i 1)) (go l1))))", "LOOPFN"],
+    ["(loopfn 10)", "55"],
+    ["(compile '(loopfn))", "NIL"],
+    ["(loopfn 10)", "55"],
+
+    ["(defun arg8fn (a b c d e x y z) (list z y x e d c b a))", "ARG8FN"],
+    ["(arg8fn 1 2 3 4 5 6 7 8)", "(8 7 6 5 4 3 2 1)"],
+    ["(compile '(arg8fn))", "NIL"],
+    ["(arg8fn 1 2 3 4 5 6 7 8)", "(8 7 6 5 4 3 2 1)"],
+
+    ["(defun var8fn() (prog (a b c d e x y z) (setq a 1) (setq c 2) " +
+     "(setq e 3) (setq y 4) (setq b 5) (setq d 6) (setq x 7) (setq z 8) " +
+     "(return (list a b c d e x y z))))", "VAR8FN"],
+    ["(var8fn)", "(1 5 2 6 3 7 4 8)"],
+    ["(compile '(var8fn))", "NIL"],
+    ["(var8fn)", "(1 5 2 6 3 7 4 8)"],
+
+    ["(common '(cov1))", "NIL"],
+    ["(defun commonfn () (* cov1 2))", "COMMONFN"],
+    ["((lambda (cov1) (commonfn)) 9)", "18"],
+    ["(compile '(commonfn))", "NIL"],
+    ["((lambda (cov1) (commonfn)) 9)", "18"],
+
+    ["(defun commonfn2 (cov1 f) (f))", "COMMONFN2"],
+    ["(commonfn2 99 '(lambda() (1+ cov1)))", "100"],
+    ["(compile '(commonfn2))", "NIL"],
+    ["(commonfn2 99 '(lambda() (1+ cov1)))", "100"],
+
+    ["(defun commonfn3 () (setq cov1 (+ cov1 2)))", "COMMONFN3"],
+    ["((lambda (cov1) (cons (commonfn3) cov1)) 9)", "(11 . 11)"],
+    ["(compile '(commonfn3))", "NIL"],
+    ["((lambda (cov1) (cons (commonfn3) cov1)) 9)", "(11 . 11)"],
+
+    ["(special '(sv1))", "NIL"],
+    ["(defun specialfn () (* sv1 2))", "SPECIALFN"],
+    ["(defun specialfn2 (sv1) (specialfn))", "SPECIALFN2"],
+    ["(defun specialfn3 (sv1) (list (specialfn) (specialfn2 (1+ sv1)) sv1))",
+     "SPECIALFN3"],
+    ["(compile '(specialfn specialfn2 specialfn3))", "NIL"],
+    ["(specialfn3 2)", "(4 6 2)"],
+
+    ["(defun spprogfn () (prog () (return (* sv1 2))))", "SPPROGFN"],
+    ["(defun spprogfn2 (x) (prog (sv1) (setq sv1 x) (return (spprogfn))))",
+     "SPPROGFN2"],
+    ["(defun spprogfn3 (x) (prog (sv1) (setq sv1 x) " +
+     "(return (list (spprogfn) (spprogfn2 (1+ sv1)) sv1))))",
+     "SPPROGFN3"],
+    ["(compile '(spprogfn spprogfn2 spprogfn3))", "NIL"],
+    ["(spprogfn3 2)", "(4 6 2)"],
+
+    ["(df quoteff (s a) (car s)) ", "QUOTEFF"],
+    ["(compile '(quoteff))", "NIL"],
+    ["(quoteff (a b c))", "(A B C)"],
+
+    ["(df evalff (s a) (eval (car s) a)) ", "EVALFF"],
+    ["(compile '(evalff))", "NIL"],
+    ["(evalff (+ 1 2))", "3"],
+
+    ["(df ifff (s a) (if (eval (car s) a) (eval (cadr s) a) " +
+     "(eval (car (cddr s)) a))) ", "IFFF"],
+    ["(compile '(ifff))", "NIL"],
+    ["((lambda (x) (ifff (onep (setq x (1+ x))) (setq x (* x 8)) x)) 0)", "8"],
+    ["((lambda (x) (ifff (onep (setq x (1+ x))) (setq x (* x 2)) x)) 1)", "2"],
+]);
