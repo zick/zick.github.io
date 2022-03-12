@@ -57,7 +57,7 @@ WebAssemblyでgotoを作ろうとしたらめっちゃ大変。
  code0();
 label1:
  code1();
-label2
+label2:
  code2();
 label3:
  code3();
