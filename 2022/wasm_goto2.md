@@ -1,6 +1,6 @@
 # WebAssemblyのgotoを妥協する
 
-[前回](/2022/wasm_goto.md)のあらすじ:
+[前回](/2022/wasm_goto.html)のあらすじ:
 WebAssemblyでgotoを作ろうとしたらめっちゃ大変。
 
 ```
