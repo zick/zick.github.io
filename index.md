@@ -1,6 +1,7 @@
 # zickのホームページへようこそ
 
 * 2022
+  * 03/20 [WebAssemblyでLISPインタプリタを書いた](/2022/wasm_inter.md)
   * 03/12 [WebAssemblyのgotoを妥協する](/2022/wasm_goto2.md)
   * 02/13 [WebAssemblyでgotoをつくる](/2022/wasm_goto.md)
   * 02/11 [WebAssemblyのテキスト表現を書いてみた](/2022/wasm.md)
