@@ -12,7 +12,8 @@ WebAssemblyで[LISP 1.5の処理系](https://github.com/zick/IchigoLisp)を書�
 [このページ](https://developer.mozilla.org/ja/docs/WebAssembly/Understanding_the_text_format)
 を読もう。
 
-### WebAssemblyのモジュール。
+### WebAssemblyのモジュール
+
 WebAssemblyのコードはモジュールという単位にまとめられる。
 モジュールはテーブル、メモリ、グローバル変数、そして関数などを含む。
 テーブルとメモリは複数のモジュールで共有できる。
@@ -353,7 +354,7 @@ LISP 1.5では可変長引数の関数はFSUBRとして定義されているた�
 複雑なFSUBRとして、PROGというものがある。
 これはラベルジャンプなどをサポートするためのもので、
 柔軟なジャンプ命令のないWebAsssemblyとは非常に相性が悪いが、
-[素晴らしき妥協](2022/wasm_goto2.html)をすれば
+[素晴らしき妥協](/2022/wasm_goto2.html)をすれば
 比較的簡単にコード生成ができる。あくまでも比較的だが。
 
 さて、組み込みのFSUBRはその意味がマニュアルに載っているので、
@@ -485,6 +486,6 @@ EXPRを消すのが良いのだが、LISP側でそれを判断するのはあま
 
 LISP 1.5の処理系を真面目に作ったら、
 どうして今どきのLISPがFSUBR/FEXPRやダイナミックスコープを捨てたのか
-大変よく分かった。みんなもLISP 1.5を実装してこの気持を体験しよう。
+大変よく分かった。みんなも真面目にLISP 1.5を実装してこの気持を体験しよう。
 
 *2022-03-21*
