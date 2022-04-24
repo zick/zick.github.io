@@ -1,6 +1,7 @@
 # zickのホームページへようこそ
 
 * 2022
+  * 04/24 [吸血鬼関数の話](/2022/vampire.md)
   * 03/21 [WebAssemblyでLISPコンパイラを書いた](/2022/wasm_comp.md)
   * 03/20 [WebAssemblyでLISPインタプリタを書いた](/2022/wasm_inter.md)
   * 03/12 [WebAssemblyのgotoを妥協する](/2022/wasm_goto2.md)
