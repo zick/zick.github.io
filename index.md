@@ -1,6 +1,7 @@
 # zickのホームページへようこそ
 
 * 2022
+  * 05/17 [R5RSのformal semanticsをOCamlで書いた](/2022/r5rsf.md)
   * 04/24 [吸血鬼関数の話](/2022/vampire.md)
   * 03/21 [WebAssemblyでLISPコンパイラを書いた](/2022/wasm_comp.md)
   * 03/20 [WebAssemblyでLISPインタプリタを書いた](/2022/wasm_inter.md)
