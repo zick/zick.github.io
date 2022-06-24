@@ -63,9 +63,9 @@ DEFINE((
 ```lisp
 > VAMPIRE(CAR)  ; CARの血を吸う
 *T*
-> CAR(A B C)  ; CARを呼び出すが、このCARはすでに吸血鬼関数になっている
+> CAR((A B C))  ; CARを呼び出すが、このCARはすでに吸血鬼関数になっている
 *T*
-> GET(A EXPR)  ; CARの引数として使われたAも吸血鬼関数に置き換わっている
+> GET(A EXPR)   ; CARの引数として使われたAも吸血鬼関数に置き換わっている
 (LABEL V (LAMBDA (G) ...))
 ```
 
