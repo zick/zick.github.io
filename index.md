@@ -1,6 +1,7 @@
 # zickのホームページへようこそ
 
 * 2022
+  * 06/24 [EVALQUOTEの話](/2022/evalquote.md)
   * 05/17 [R5RSのformal semanticsをOCamlで書いた](/2022/r5rsf.md)
   * 04/24 [吸血鬼関数の話](/2022/vampire.md)
   * 03/21 [WebAssemblyでLISPコンパイラを書いた](/2022/wasm_comp.md)
