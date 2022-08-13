@@ -1,8 +1,8 @@
-# R7RSのformal semanticsをOCamlで書いた。
+# R7RSのformal semanticsをOCamlで書いた
 
 ## はじめに
 
-[ちょっと前](/2022/r5rsf.md)にR5RSのformal semanticsをOCamlで書いた。
+[ちょっと前](/2022/r5rsf.html)にR5RSのformal semanticsをOCamlで書いた。
 R7RSのformal semanticsはdynamic-windを除けばR5RSと対して変わらないという噂を
 10年くらい前に聞いたような気がするので、
 以前のOCamlのプログラムをR7RS用に書き直してみた。
@@ -53,7 +53,7 @@ and  tyP =
 
 ### 意味関数
 
-R5RSの意味関数は`ℰ`は`Exp -> U -> K -> C`という型で、
+R5RSの意味関数`ℰ`は`Exp -> U -> K -> C`という型で、
 式、環境、継続、内部記憶を受け取ったが、R7RSでは
 `Exp -> U -> P -> K -> C`となっており、
 dynamic pointerも受け取るようになっている。

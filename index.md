@@ -1,6 +1,7 @@
 # zickのホームページへようこそ
 
 * 2022
+  * 08/13 [R7RSのformal semanticsをOCamlで書いた](/2022/r7rsf.md)
   * 07/17 [（いまさら）ごみ集めのないLISPの話とか](/2022/gc.md)
   * 06/24 [EVALQUOTEの話](/2022/evalquote.md)
   * 05/17 [R5RSのformal semanticsをOCamlで書いた](/2022/r5rsf.md)
