@@ -1,6 +1,7 @@
 # zickのホームページへようこそ
 
 * 2022
+  * 10/01 [Googleスプレッドシートの名前付き関数でLISPインタプリタを作った](/2022/sheets.md)
   * 09/06 [C++のテンプレートでLISPを作った話](/2022/template.md)
   * 08/13 [R7RSのformal semanticsをOCamlで書いた](/2022/r7rsf.md)
   * 07/17 [（いまさら）ごみ集めのないLISPの話とか](/2022/gc.md)
