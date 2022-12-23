@@ -1,5 +1,7 @@
 # zickのホームページへようこそ
 
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">あなたはN番目の訪問者です（ただしNは左下に表示される）</p>&mdash; zick (@zick_minoh) <a href="https://twitter.com/zick_minoh/status/1606092008925171712?ref_src=twsrc%5Etfw">December 23, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 * 2022
   * 12/17 [2022年を振り返る](/2022/yearend.md)
   * 11/05 [2022年秋のLISPポエム](/2022/diff.md)
