@@ -30,6 +30,18 @@ var importObject = {
         getTimeInMs: function() {
             return BigInt(new Date().getTime());
         },
+        read: function() {
+            if (typeof SharedArrayBuffer === 'undefined') {
+                return;
+            }
+            const lock_buf = new SharedArrayBuffer(4);
+            const lock = new Int32Array(lock_buf);
+            const str_buf = new SharedArrayBuffer(10240);
+            const str_arr = new Uint8Array(str_buf);
+            postMessage(['wasm', 'read', lock, str_arr]);
+            Atomics.wait(lock, 0, 0);
+            appendStringArray(str_arr);
+        }
     },
 };
 
@@ -41,6 +53,18 @@ function storeString(str) {
         i8[input_address + i] = str_array[i];
     }
     i8[input_address + str_array.length] = 0;
+}
+function appendStringArray(str_arr) {
+    var i8 = new Uint8Array(memory.buffer);
+    var offset = input_address;
+    while (i8[offset] != 0) {
+        offset++;
+    }
+    var i;
+    for (i = 0; str_arr[i] != 0; i++) {
+        i8[offset + i] = str_arr[i];
+    }
+    i8[offset + i] = 0;
 }
 
 function getString(address) {
@@ -67,6 +91,12 @@ function Evalquote(str) {
     return last_output;
 }
 
+function EvalAll(str) {
+    storeString(str);
+    ichigo.instance.exports.readAndEvalAll();
+    return last_output;
+}
+
 WebAssembly.instantiateStreaming(fetch('ichigo.wasm'), importObject)
     .then(obj => {
         ichigo = obj;
@@ -85,6 +115,8 @@ onmessage = function(e) {
         postMessage([sender, type, Eval(e.data[2])]);
     } else if (type == 'evalquote') {
         postMessage([sender, 'eval', Evalquote(e.data[2])]);
+    } else if (type == 'evalall') {
+        postMessage([sender, 'eval', EvalAll(e.data[2])]);
     } else if (type == 'debug_level') {
         var level = e.data[2];
         console.log('debug_level = ' + level);
