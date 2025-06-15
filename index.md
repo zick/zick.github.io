@@ -41,3 +41,6 @@
   * 05/23 [式が再帰的なプログラム](/2021/recursion.md)
   * 05/15 [lambdaを返すだけの雑なコンパイルをC++で試す](/2021/compile.md)
 * [zick](/zick.md)
+  * [魔法言語 リリカル☆Lisp](https://lyrical.zick.run/)
+  * [マンガで分かるLisp](https://lambda.zick.run/cdr/mwl/)
+  * [ゲ－ムとかのペ－ジ](https://harumak7.zick.run/)
